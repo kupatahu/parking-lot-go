@@ -1,6 +1,9 @@
 package spot
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Spot struct {
 	plate string
@@ -33,4 +36,12 @@ func (s *Spot) Unpark() (string, error) {
 
 func (s *Spot) IsAvailable() bool {
 	return s.plate == ""
+}
+
+func (s *Spot) Status() string {
+	return fmt.Sprintf("available: %v, plate number: %v", s.IsAvailable(), s.plate)
+}
+
+func (s *Spot) PlateEquals(plate string) bool {
+	return s.plate == plate
 }

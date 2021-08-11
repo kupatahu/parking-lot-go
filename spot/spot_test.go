@@ -1,6 +1,9 @@
 package spot
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestSpot(t *testing.T) {
 	t.Run("#Unpark", func(t *testing.T) {
@@ -65,6 +68,62 @@ func TestSpot(t *testing.T) {
 
 			if got != false {
 				t.Errorf("want %v, got %v", false, got)
+				t.Fail()
+			}
+		})
+	})
+	
+	t.Run("#Status", func(t *testing.T) {
+		t.Run("return available true if no parked car", func(t *testing.T) {
+			s := New()
+			want := "available: true, plate number: "
+
+			got := s.Status()
+
+			if got != want {
+				t.Errorf("want %v, got %v", want, got)
+				t.Fail()
+			}
+		})
+
+		t.Run("return available false with plate number if occupied", func(t *testing.T) {
+			s := New()
+			plate := "abc"
+			s.Park(plate)
+			want := fmt.Sprintf("available: false, plate number: %v", plate)
+
+			got := s.Status()
+
+			if got != want {
+				t.Errorf("want %v, got %v", want, got)
+				t.Fail()
+			}
+		})
+	})
+	
+	t.Run("#PlateEquals", func(t *testing.T) {
+		t.Run("return false if parked car plate not equals to given plate", func(t *testing.T) {
+			s := New()
+			want := false
+
+			got := s.PlateEquals("abc")
+
+			if got != want {
+				t.Errorf("want %v, got %v", want, got)
+				t.Fail()
+			}
+		})
+
+		t.Run("return true if parked car plate equals to given plate", func(t *testing.T) {
+			s := New()
+			plate := "abc"
+			s.Park(plate)
+			want := true
+
+			got := s.PlateEquals("abc")
+
+			if got != want {
+				t.Errorf("want %v, got %v", want, got)
 				t.Fail()
 			}
 		})
